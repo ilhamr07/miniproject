@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Ucapan Selamat Menikah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+      color: #444;
+    }
+    form {
+      margin-bottom: 20px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    input, textarea, button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #fff;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border-left: 5px solid #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ucapan Selamat Menikah</h1>
+
+  <form id="ucapanForm">
+    <input type="text" id="nama" placeholder="Nama Anda" required>
+    <textarea id="pesan" placeholder="Pesan Ucapan" required></textarea>
+    <select id="hadir">
+      <option value="true">Hadir</option>
+      <option value="false">Tidak Hadir</option>
+    </select>
+    <button type="submit">Kirim Ucapan</button>
+  </form>
+
+  <ul id="listUcapan"></ul>
+
+  <script>
+    const form = document.getElementById('ucapanForm');
+    const list = document.getElementById('listUcapan');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = {
+        nama: document.getElementById('nama').value,
+        pesan: document.getElementById('pesan').value,
+        hadir: document.getElementById('hadir').value === 'true'
+      };
+
+      await fetch('/ucapan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      form.reset();
+      loadUcapan(); // Refresh list
+    });
+
+    async function loadUcapan() {
+      const res = await fetch('/ucapan');
+      const ucapan = await res.json();
+      list.innerHTML = '';
+      ucapan.forEach(u => {
+        const item = document.createElement('li');
+        item.innerHTML = `<strong>${u.nama}</strong> (${u.hadir ? 'Hadir' : 'Tidak Hadir'}):<br>${u.pesan}<br><small>${new Date(u.waktu).toLocaleString()}</small>`;
+        list.appendChild(item);
+      });
+    }
+
+    loadUcapan(); // Load on page load
+  </script>
+</body>
+</html>
