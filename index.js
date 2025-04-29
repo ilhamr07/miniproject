@@ -10,7 +10,7 @@ app.use(express.json());
 const pool = new Pool({
   host: 'mydb-practic.cfc8gku0esou.ap-southeast-1.rds.amazonaws.com',
   user: 'postgresql',
-  password: 'postgresql123',
+  password: 'Mypassword123#',
   database: 'postgres',
   port: 5432,
   ssl: {
