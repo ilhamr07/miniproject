@@ -34,6 +34,6 @@ app.post('/ucapan', async (req, res) => {
   res.status(201).json(result.rows[0]);
 });
 
-app.listen(3000, () => {
+app.listen(3000, '0.0.0.0', () => {
   console.log('Server jalan di http://localhost:3000');
 });
